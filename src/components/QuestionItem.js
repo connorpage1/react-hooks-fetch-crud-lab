@@ -1,7 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 
-function QuestionItem({ question }) {
+function QuestionItem({ question, deleteQuestion, patchQuestion}) {
+  
+  
   const { id, prompt, answers, correctIndex } = question;
+  
+  const [value, setValue] = useState(correctIndex)
 
   const options = answers.map((answer, index) => (
     <option key={index} value={index}>
@@ -15,9 +19,12 @@ function QuestionItem({ question }) {
       <h5>Prompt: {prompt}</h5>
       <label>
         Correct Answer:
-        <select defaultValue={correctIndex}>{options}</select>
+        <select defaultValue={correctIndex} onChange={(e)=> {
+          setValue(e.target.value)
+          patchQuestion({...question, correctIndex: value })}}
+          >{options}</select>
       </label>
-      <button>Delete Question</button>
+      <button onClick={()=>deleteQuestion(id)}>Delete Question</button>
     </li>
   );
 }
